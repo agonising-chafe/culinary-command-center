@@ -1,32 +1,16 @@
+/** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,jsx,ts,tsx}"
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
         brand: {
-          DEFAULT: '#059669', // emerald
-          light: '#10b981',
+          light: '#a7f3d0',
+          DEFAULT: '#10b981',
           dark: '#047857',
         },
       },
     },
   },
-  plugins: [require('daisyui')],
-  daisyui: {
-    themes: [
-      {
-        ccc: {
-          "primary": "#059669",
-          "primary-content": "#ffffff",
-          "secondary": "#10b981",
-          "accent": "#047857",
-          "base-100": "#ffffff",
-        },
-      },
-      "light",
-    ],
-  },
-}
+  plugins: [],
+};
