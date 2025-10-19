@@ -1,0 +1,58 @@
+.goal-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.goal-section h2 {
+  font-size: 2rem;
+  color: #333;
+}
+
+.goal-section textarea {
+  width: 100%;
+  max-width: 600px;
+  min-height: 80px;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.goal-section button {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.day-column {
+  background-color: #f4f7f6;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.day-column h3 {
+  text-align: center;
+  margin-top: 0;
+  color: #444;
+}
+
+.meal-slot {
+  min-height: 200px;
+}
+
+.empty-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  color: #aaa;
+  cursor: pointer;
+}

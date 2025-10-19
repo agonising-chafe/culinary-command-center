@@ -1,0 +1,7 @@
+.App {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: flex-start; /* Align items to the top */
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}

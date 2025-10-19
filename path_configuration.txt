@@ -1,0 +1,10 @@
+# Path Configuration Documentation
+
+## Default Path Folder
+- The default path folder has been set to: C:\Users\Carter
+
+## Verification
+- The command to verify the path was executed, but the output could not be captured.
+
+## Next Steps
+- Ensure that the new path is recognized in new terminal sessions.
