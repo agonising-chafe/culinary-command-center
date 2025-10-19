@@ -1,9 +1,8 @@
 const router = require('express').Router();
 const User = require('../models/User');
 
-// --- IMPORTANT ---
-// Make sure this is the same hardcoded user ID from your pantry.js file!
-const TEST_USER_ID = '64d1f2a3b5c6d7e8f9012345'; // <-- Replace with your actual MongoDB user ID
+// Use a test user ID from environment for development
+const TEST_USER_ID = process.env.TEST_USER_ID;
 
 /**
  * Helper function to consolidate ingredients.
@@ -72,6 +71,9 @@ const groupItems = (items) => {
 // Route: POST /api/shoppinglist/generate
 router.post('/generate', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const { recipes } = req.body; // Get recipes from the front-end
     if (!recipes) {
       return res.status(400).json({ message: 'No recipes provided.' });

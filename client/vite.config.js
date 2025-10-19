@@ -1,8 +1,8 @@
-import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { fileURLToPath, URL } from 'node:url'
 
-// Place at: client/vite.config.js
-export default {
+export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
@@ -11,9 +11,13 @@ export default {
   },
   server: {
     port: 5174,
-    open: true
-    // proxy: {
-    //   '/api': 'http://localhost:3000' // adjust if your server runs elsewhere
-    // }
-  }
-}
+    open: false,
+    proxy: {
+      '/api': {
+        target: process.env.VITE_API_URL || 'http://localhost:5001',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
+})

@@ -1,13 +1,16 @@
 const router = require('express').Router();
 const User = require('../models/User');
 
-// Hardcoded user ID for testing purposes
-const TEST_USER_ID = 'YOUR_USER_ID_HERE'; // Replace with actual user ID
+// Use a test user ID from environment for development
+const TEST_USER_ID = process.env.TEST_USER_ID;
 
 // GET all stores for a user
 // Route: GET /api/stores
 router.get('/', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -22,6 +25,9 @@ router.get('/', async (req, res) => {
 // Route: POST /api/stores
 router.post('/', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -43,6 +49,9 @@ router.post('/', async (req, res) => {
 // Route: DELETE /api/stores/:storeId
 router.delete('/:storeId', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });

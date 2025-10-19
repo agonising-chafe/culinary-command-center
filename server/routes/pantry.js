@@ -1,13 +1,16 @@
 const router = require('express').Router();
 const User = require('../models/User');
 
-// Hardcoded user ID for testing purposes
-const TEST_USER_ID = '68f2e10b4ca6bf41d36b16feYOUR_USER_ID_HERE'; // We will get this ID in the next step
+// Use a test user ID from environment for development
+const TEST_USER_ID = process.env.TEST_USER_ID;
 
 // GET all pantry items for a user
 // Route: GET /api/pantry
 router.get('/', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -22,6 +25,9 @@ router.get('/', async (req, res) => {
 // Route: POST /api/pantry
 router.post('/', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -44,6 +50,9 @@ router.post('/', async (req, res) => {
 // Route: DELETE /api/pantry/:itemId
 router.delete('/:itemId', async (req, res) => {
   try {
+    if (!TEST_USER_ID) {
+      return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
+    }
     const user = await User.findById(TEST_USER_ID);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
