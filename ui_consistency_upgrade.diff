@@ -1,0 +1,96 @@
+--- a/client/src/screens/PantryScreen.jsx
++++ b/client/src/screens/PantryScreen.jsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++
++export default function PantryScreen() {
++  return (
++    <section className="rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 space-y-6">
++      <h1 className="text-xl font-semibold text-emerald-700 border-b border-emerald-100 pb-3">
++        Pantry
++      </h1>
++      <p className="text-slate-600">Your pantry items will appear here soon.</p>
++    </section>
++  );
++}
+--- a/client/src/screens/WeeklyPlannerScreen.jsx
++++ b/client/src/screens/WeeklyPlannerScreen.jsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++
++export default function WeeklyPlannerScreen() {
++  return (
++    <section className="rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 space-y-6">
++      <h1 className="text-xl font-semibold text-emerald-700 border-b border-emerald-100 pb-3">
++        Weekly Planner
++      </h1>
++      <p className="text-slate-600">Your weekly planner layout will appear here soon.</p>
++    </section>
++  );
++}
+--- a/client/src/screens/RecipesScreen.jsx
++++ b/client/src/screens/RecipesScreen.jsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++
++export default function RecipesScreen() {
++  return (
++    <section className="rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 space-y-6">
++      <h1 className="text-xl font-semibold text-emerald-700 border-b border-emerald-100 pb-3">
++        Recipes
++      </h1>
++      <p className="text-slate-600">Your saved and suggested recipes will appear here soon.</p>
++    </section>
++  );
++}
+--- a/client/src/screens/ShoppingListScreen.jsx
++++ b/client/src/screens/ShoppingListScreen.jsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++
++export default function ShoppingListScreen() {
++  return (
++    <section className="rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 space-y-6">
++      <h1 className="text-xl font-semibold text-emerald-700 border-b border-emerald-100 pb-3">
++        Shopping List
++      </h1>
++      <p className="text-slate-600">Your categorized shopping lists will appear here soon.</p>
++    </section>
++  );
++}
+--- a/client/src/screens/SettingsScreen.jsx
++++ b/client/src/screens/SettingsScreen.jsx
+@@ -0,0 +1,12 @@
++import React from 'react';
++
++export default function SettingsScreen() {
++  return (
++    <section className="rounded-xl bg-white shadow-sm hover:shadow-md transition-all duration-300 p-6 space-y-6">
++      <h1 className="text-xl font-semibold text-emerald-700 border-b border-emerald-100 pb-3">
++        Settings
++      </h1>
++      <p className="text-slate-600">Configure your preferences and app settings here.</p>
++    </section>
++  );
++}
+--- a/client/tailwind.config.js
++++ b/client/tailwind.config.js
+@@ -0,0 +1,18 @@
++import { defineConfig } from 'vite'
++import react from '@vitejs/plugin-react'
++
++export default {
++  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
++  theme: {
++    extend: {
++      colors: {
++        brand: {
++          light: '#a7f3d0',
++          DEFAULT: '#10b981',
++          dark: '#047857',
++        },
++      },
++    },
++  },
++  plugins: [],
++}
