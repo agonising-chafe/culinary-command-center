@@ -1,13 +1,13 @@
-import React from 'react'
-import AppHeader from './AppHeader'
+import React from 'react';
+import AppHeader from './AppHeader';
 
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
-      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-        <AppHeader />
-        {children}
-      </div>
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-800">
+      <AppHeader />
+      <main className="w-full flex-1 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+        <div className="mx-auto w-full max-w-7xl space-y-8">{children}</div>
+      </main>
     </div>
-  )
+  );
 }
