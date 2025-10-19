@@ -82,58 +82,22 @@ export default function AppHeader() {
   };
 
   return (
-    <header className="w-full border-b border-slate-200 bg-white/90 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-4 text-[14px] sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link
-            to="/"
-            className="text-lg font-semibold text-slate-900 transition hover:text-emerald-600 sm:text-xl"
-          >
-            Culinary Command Center
-          </Link>
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-lg shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <Link to="/" className="text-xl font-bold text-brand-dark tracking-tight">
+          🍳 Culinary Command Center
+        </Link>
+        <nav className="flex items-center gap-3 text-sm">
+          <Link className="text-slate-700 hover:text-brand-dark" to="/pantry">Pantry</Link>
+          <Link className="text-slate-700 hover:text-brand-dark" to="/recipes">Recipes</Link>
+          <Link className="text-slate-700 hover:text-brand-dark" to="/settings">Settings</Link>
           <button
             type="button"
             className={buttonClasses({ variant: 'primary' })}
             onClick={seedDemo}
+            title="Seed demo data"
           >
-            Seed demo data
-          </button>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            className={buttonClasses({ disabled: true })}
-            disabled
-            aria-disabled="true"
-            title="Weekly recap is coming soon"
-          >
-            Review last week
-          </button>
-          <button
-            type="button"
-            className={buttonClasses({})}
-            onClick={() => navigate('/pantry')}
-          >
-            My pantry
-          </button>
-          <button
-            type="button"
-            className={buttonClasses({})}
-            onClick={() => navigate('/settings')}
-          >
-            Settings
-          </button>
-          <button
-            type="button"
-            className={buttonClasses({ disabled: !shoppingItems.length })}
-            disabled={!shoppingItems.length}
-            aria-disabled={!shoppingItems.length}
-            onClick={() => {
-              if (!shoppingItems.length) return;
-              navigate('/shopping-list');
-            }}
-          >
-            {shoppingItems.length ? 'View shopping list' : 'Generate shopping list'}
+            Seed demo
           </button>
           <button
             type="button"
@@ -160,7 +124,7 @@ export default function AppHeader() {
               <line x1="14" y1="11" x2="14" y2="17" />
             </svg>
           </button>
-        </div>
+        </nav>
       </div>
     </header>
   );

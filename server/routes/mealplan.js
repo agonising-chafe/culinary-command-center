@@ -1,15 +1,48 @@
 const router = require('express').Router();
-const OpenAI = require('openai');
+const MOCK = String(process.env.MOCK_MODE).toLowerCase() === 'true';
+let OpenAI = null;
+let openai = null;
+try {
+  OpenAI = require('openai');
+  if (process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+} catch {
+  // openai package not installed; route will return 501 if called
+}
 
-// Initialize the OpenAI client with your API key
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+function sampleRecipes(prompt = 'Tasty meal', count = 3) {
+  const items = [];
+  for (let i = 0; i < count; i += 1) {
+    items.push({
+      id: Date.now() + i,
+      title: `${prompt} #${i + 1}`,
+      cookTime: ['20m', '30m', '45m'][i % 3],
+      calories: `${450 + i * 50} kcal`,
+      category: ['Quick', 'Balanced', 'Comfort'][i % 3],
+      ingredients: ['1 onion', '2 eggs', '1 tbsp olive oil'],
+      instructions: [
+        'Prep ingredients',
+        'Cook in pan until done',
+        'Serve warm',
+      ],
+      image: '',
+    });
+  }
+  return items;
+}
 
 // The main generation endpoint
 // Route: POST /api/mealplan/generate
 router.post('/generate', async (req, res) => {
   try {
+    if (MOCK) {
+      const { prompt = 'Chef choice' } = req.body || {};
+      return res.json(sampleRecipes(prompt, 6));
+    }
+    if (!openai) {
+      return res.status(501).json({ message: 'AI generation not configured on server.' });
+    }
     const { prompt, expiring = [], taste = {} } = req.body;
 
     if (!prompt) {
@@ -59,19 +92,14 @@ router.post('/generate', async (req, res) => {
 });
 
 router.post('/generate-one', async (req, res) => {
-  const { prompt, expiring = [], taste = {} } = req.body;
-  // Stub implementation: replace with actual AI integration
-  const sampleRecipe = {
-    id: Date.now(),
-    title: `Generated for: ${prompt}`,
-    cookTime: '30m',
-    calories: '500 kcal',
-    category: 'General',
-    ingredients: [],
-    instructions: [],
-    image: ''
-  };
-  res.json({ recipe: sampleRecipe });
+  const { prompt = 'Chef choice' } = req.body || {};
+  if (MOCK) {
+    const [one] = sampleRecipes(prompt, 1);
+    return res.json({ recipe: one });
+  }
+  // Without mock or OpenAI, return a predictable stub
+  const sampleRecipe = sampleRecipes(prompt, 1)[0];
+  return res.json({ recipe: sampleRecipe });
 });
 
 module.exports = router;

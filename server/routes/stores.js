@@ -1,6 +1,13 @@
 const router = require('express').Router();
 const User = require('../models/User');
 
+// Mock mode toggle
+const MOCK = String(process.env.MOCK_MODE).toLowerCase() === 'true';
+const mockStores = [
+  { _id: 's1', name: 'Walmart' },
+  { _id: 's2', name: 'Costco' },
+];
+
 // Use a test user ID from environment for development
 const TEST_USER_ID = process.env.TEST_USER_ID;
 
@@ -8,6 +15,9 @@ const TEST_USER_ID = process.env.TEST_USER_ID;
 // Route: GET /api/stores
 router.get('/', async (req, res) => {
   try {
+    if (MOCK) {
+      return res.json(mockStores);
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -25,6 +35,11 @@ router.get('/', async (req, res) => {
 // Route: POST /api/stores
 router.post('/', async (req, res) => {
   try {
+    const newStore = { _id: 's' + Date.now().toString(36), name: req.body.name };
+    if (MOCK) {
+      mockStores.push(newStore);
+      return res.status(201).json(mockStores);
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -32,12 +47,7 @@ router.post('/', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
-    const newStore = {
-      name: req.body.name,
-    };
-
-    user.stores.push(newStore);
+    user.stores.push({ name: newStore.name });
     await user.save();
     res.status(201).json(user.stores);
   } catch (err) {
@@ -49,6 +59,12 @@ router.post('/', async (req, res) => {
 // Route: DELETE /api/stores/:storeId
 router.delete('/:storeId', async (req, res) => {
   try {
+    const id = req.params.storeId;
+    if (MOCK) {
+      const idx = mockStores.findIndex(s => String(s._id) === String(id));
+      if (idx !== -1) mockStores.splice(idx, 1);
+      return res.json({ message: 'Store deleted' });
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -56,8 +72,7 @@ router.delete('/:storeId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
-    user.stores.pull({ _id: req.params.storeId });
+    user.stores.pull({ _id: id });
     await user.save();
     res.json({ message: 'Store deleted' });
   } catch (err) {

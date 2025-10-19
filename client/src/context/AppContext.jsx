@@ -3,6 +3,8 @@ import axios from 'axios'
 
 export const AppContext = createContext(null)
 
+const OFFLINE = String(import.meta.env?.VITE_OFFLINE).toLowerCase() === 'true'
+
 const LS = {
   pantry: 'pantry',
   mealPlan: 'mealPlan',
@@ -63,6 +65,10 @@ export function AppProvider({ children }) {
   // Load initial data from the backend
   useEffect(() => {
     async function fetchData() {
+      if ( OFFLINE ) {
+        // Skip network calls; rely on localStorage defaults
+        return
+      }
       try {
         const [listRes, storesRes, favRes] = await Promise.all([
           axios.get('/api/shoppinglist'),

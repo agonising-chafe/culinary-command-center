@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Typography upgrades */
+h1, h2, h3 {
+  font-weight: 600;
+  color: #0f172a; /* slate-900 */
+}
+h1 { font-size: 1.875rem; }
+h2 { font-size: 1.5rem; }
+
+/* Slightly larger base font for readability */
+body { font-size: 15px; }
+
 * {
   box-sizing: border-box;
 }

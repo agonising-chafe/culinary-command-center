@@ -1,6 +1,15 @@
 const router = require('express').Router();
 const User = require('../models/User');
 
+// Mock mode toggle
+const MOCK = String(process.env.MOCK_MODE).toLowerCase() === 'true';
+// Simple in-memory mock state (process lifetime only)
+const mockPantry = [
+  { _id: 'p1', name: 'onion', quantity: '2' },
+  { _id: 'p2', name: 'garlic', quantity: '3 cloves' },
+  { _id: 'p3', name: 'olive oil', quantity: '250 ml' },
+];
+
 // Use a test user ID from environment for development
 const TEST_USER_ID = process.env.TEST_USER_ID;
 
@@ -8,6 +17,9 @@ const TEST_USER_ID = process.env.TEST_USER_ID;
 // Route: GET /api/pantry
 router.get('/', async (req, res) => {
   try {
+    if (MOCK) {
+      return res.json(mockPantry);
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -25,6 +37,15 @@ router.get('/', async (req, res) => {
 // Route: POST /api/pantry
 router.post('/', async (req, res) => {
   try {
+    const newItem = {
+      _id: 'p' + Date.now().toString(36),
+      name: req.body.name,
+      quantity: req.body.quantity,
+    };
+    if (MOCK) {
+      mockPantry.push(newItem);
+      return res.status(201).json(mockPantry);
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -32,13 +53,7 @@ router.post('/', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
-    const newItem = {
-      name: req.body.name,
-      quantity: req.body.quantity,
-    };
-
-    user.pantry.push(newItem);
+    user.pantry.push({ name: newItem.name, quantity: newItem.quantity });
     await user.save();
     res.status(201).json(user.pantry);
   } catch (err) {
@@ -50,6 +65,12 @@ router.post('/', async (req, res) => {
 // Route: DELETE /api/pantry/:itemId
 router.delete('/:itemId', async (req, res) => {
   try {
+    const id = req.params.itemId;
+    if (MOCK) {
+      const idx = mockPantry.findIndex(i => String(i._id) === String(id));
+      if (idx !== -1) mockPantry.splice(idx, 1);
+      return res.json({ message: 'Item deleted' });
+    }
     if (!TEST_USER_ID) {
       return res.status(500).json({ message: 'TEST_USER_ID not configured on server.' });
     }
@@ -57,9 +78,7 @@ router.delete('/:itemId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    
-    // Find the item and pull it from the array
-    user.pantry.pull({ _id: req.params.itemId });
+    user.pantry.pull({ _id: id });
     await user.save();
     res.json({ message: 'Item deleted' });
   } catch (err) {

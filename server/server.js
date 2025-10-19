@@ -2,19 +2,21 @@
 
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose'); // Import mongoose
-require('dotenv').config({ path: './server/.env' }); // Import dotenv with explicit path
-
-console.log('Loaded environment variables:', process.env); // Debug log to verify all env vars
-
-console.log('OpenAI API Key:', process.env.OPENAI_API_KEY); // Debug log to verify API key loading
+const mongoose = require('mongoose');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const app = express();
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
+const MOCK = String(process.env.MOCK_MODE).toLowerCase() === 'true';
 
 
-app.use(cors());
-app.use(express.json());
+const clientOrigin = process.env.CLIENT_URL;
+app.use(cors({
+  origin: clientOrigin || true, // reflect request origin in dev/mock
+  credentials: true,
+}));
+app.use(express.json({ limit: '2mb' }));
 
 // --- Mongoose Connection ---
 const mongoUri = process.env.MONGO_URI || 'your_default_mongo_connection_string_here';
@@ -53,6 +55,11 @@ console.log('Shopping list routes loaded');
 
 app.get('/', (req, res) => {
   res.send('Hello from the Culinary Command Center API!');
+});
+
+// Simple health endpoint for connectivity checks
+app.get('/api/health', (req, res) => {
+  res.json({ ok: true, mock: MOCK });
 });
 
 app.listen(PORT, () => {
